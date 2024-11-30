@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Enhancement Comparison</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: url('https://source.unsplash.com/1600x900/?space') no-repeat center center fixed;
+            background-size: cover;
+            color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow: auto;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.9); /* Darker semi-transparent background */
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            max-width: 1000px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            backdrop-filter: blur(8px); /* Adds a blur effect to the background */
+        }
+        h1 {
+            color: #ffffff;
+            font-size: 2.8rem;
+            margin-bottom: 30px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        input[type="file"] {
+            padding: 14px;
+            border: 2px solid #555;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 420px;
+            margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+        input[type="file"]::file-selector-button {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        input[type="file"]:hover::file-selector-button {
+            background-color: #003d7a;
+        }
+        button {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        button:hover {
+            background-color: #003d7a;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+        .images {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        .image-container {
+            flex: 1;
+            min-width: 280px;
+            max-width: 320px;
+            background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .image-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7);
+        }
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-bottom: 3px solid #0056b3; /* Bottom border for visual interest */
+        }
+        .caption {
+            padding: 15px;
+            background-color: #0056b3;
+            color: white;
+            text-align: center;
+            font-weight: 500;
+            border-top: 2px solid #003d7a; /* Top border to match button styling */
+        }
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .images {
+                flex-direction: column;
+                align-items: center;
+            }
+            h1 {
+                font-size: 2.2rem;
+            }
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Compare Image Enhancements</h1>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" accept="image/*" required>
+            <button type="submit">Upload and Enhance</button>
+        </form>
+
+        <!-- Show the images if they exist -->
+        {% if original_image and pipeline_image and unet_image and llflow_image and deep_upe_image and retinex_net_image %}
+        <div class="images">
+            <div class="image-container">
+                <img src="{{ original_image }}" alt="Original Image">
+                <div class="caption">Original Image</div>
+            </div>
+            <div class="image-container">
+                <img src="{{ pipeline_image }}" alt="Pipeline Enhanced Image">
+                <div class="caption">VIPER Enhanced Image</div>
+            </div>
+            <div class="image-container">
+                <img src="{{ unet_image }}" alt="U-Net Enhanced Image">
+                <div class="caption">YOLO v5 Enhanced Image</div>
+            </div>
+            <div class="image-container">
+                <img src="{{ llflow_image }}" alt="LLFlowNet Enhanced Image">
+                <div class="caption">LLFlowNet Enhanced Image</div>
+            </div>
+            <div class="image-container">
+                <img src="{{ deep_upe_image }}" alt="DeepUPE Enhanced Image">
+                <div class="caption">DeepUPE Enhanced Image</div>
+            </div>
+            <div class="image-container">
+                <img src="{{ retinex_net_image }}" alt="Retinex-Net Enhanced Image">
+                <div class="caption">Retinex-Net Enhanced Image</div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
