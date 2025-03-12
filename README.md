@@ -21,7 +21,6 @@ The dataset consists of **485 images** of the lunar south pole, categorized into
 - **OpenCV for Image Processing**
 - **Flask for Backend API**
 - **React.js for Frontend Visualization**
-- **Azure for Data Engineering** (Optional)
 
 ## Features
 - **Shadow Removal & Image Enhancement**: Uses deep learning to enhance lunar crater images.
