@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Enhancement Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+        }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .navbar-brand {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .container {
+            margin: 20px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .upload-section {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        #imageInput {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        #processButton {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #processButton:hover {
+            background-color: #45a049;
+        }
+        .output-container {
+            display: none; /* Initially hide the output section */
+            margin-top: 20px;
+            text-align: center;
+        }
+        .image-section {
+            display: inline-block;
+            width: 30%;
+            margin: 15px;
+            text-align: center;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .image-section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .image-section h3 {
+            margin-top: 10px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <h1 class="navbar-brand">SHADOW VIPERS - Image Enhancer</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2>Enhance Your Images</h2>
+        <form id="uploadForm" action="/process" method="POST" enctype="multipart/form-data">
+            <div class="upload-section">
+                <input type="file" id="imageInput" name="file" accept="image/png" />
+                <button type="submit" id="processButton">Enhance Images</button>
+            </div>
+        </form>
+        
+
+        <div id="outputContainer" class="output-container">
+            <div class="image-section">
+                <h3>Original Image</h3>
+                <img id="originalImage" src="" alt="Original Image" />
+            </div>
+            <div class="image-section">
+                <h3>U-Net Model</h3>
+                <img id="unetImage" src="" alt="U-Net Enhanced Image" />
+            </div>
+            <div class="image-section">
+                <h3>LLFlow Model</h3>
+                <img id="llflowImage" src="" alt="LLFlow Enhanced Image" />
+            </div>
+            <div class="image-section">
+                <h3>Deep UPE Model</h3>
+                <img id="deepUpeImage" src="" alt="Deep UPE Enhanced Image" />
+            </div>
+            <div class="image-section">
+                <h3>Retinex-Net Model</h3>
+                <img id="retinexnetImage" src="" alt="Retinex-Net Enhanced Image" />
+            </div>
+            <div class="image-section">
+                <h3>Pipeline Output</h3>
+                <img id="pipelineImage" src="" alt="Pipeline Enhanced Image" />
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent the default form submission
+        
+            let formData = new FormData(this);
+        
+            fetch('/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Server response:", data); // Debugging output
+        
+                if (data.success) {
+                    document.getElementById('originalImage').src = data.original_image;
+                    document.getElementById('unetImage').src = data.unet_image;
+                    document.getElementById('llflowImage').src = data.llflow_image;
+                    document.getElementById('deepUpeImage').src = data.deep_upe_image;
+                    document.getElementById('retinexnetImage').src = data.retinex_net_image;
+                    document.getElementById('pipelineImage').src = data.pipeline_image;
+                    document.getElementById('outputContainer').style.display = 'block'; // Show the output section
+                } else {
+                    alert('Failed to process the image. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to process the image. Please try again.');
+            });
+        });
+        
+    </script>
+</body>
+</html>
